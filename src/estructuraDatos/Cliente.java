@@ -45,8 +45,29 @@ public class Cliente {
             
     this.telefono = telefono;
             
-    this.baja = false;
+    this.baja = false;      
+  
+    }
+    
+    /**
+     * Constructor de la clase Cliente
+     * @param id dni
+     * @param nombre nombre
+     * @param direccion direccion
+     * @param telefono  teléfono
+     * @param baja true | false
+     */
+    public Cliente(String id, String nombre, String direccion, String telefono, boolean baja){
+        
+    this.id = id;
             
+    this.nombre = nombre;
+            
+    this.direccion = direccion;
+            
+    this.telefono = telefono;
+            
+    this.baja = baja;      
   
     }
     
@@ -152,14 +173,25 @@ public class Cliente {
     }// fin del método setBaja(boolean baja).
     
     /**
+     * Método que devuelve una cadena con los atributos del objeto
+     * @return registro cadena con atributos
+     */
+    public String guardarDatos(){
+        
+       String registro;
+       
+       registro = id + "&" + nombre + "&" + direccion + "&" + telefono + "&" + baja + "\n";
+       
+       return registro;
+   }// fin del método  guardarDatos().
+    
+    /**
      *
      */
     @Override
     public String toString(){
 
         return "Identificador: " + id + "\nNombre:        " + nombre + "\nDirección:     " + direccion + "\nTeléfono:      " + telefono;
-        
-        
         
     } //fin del método toString()
 }

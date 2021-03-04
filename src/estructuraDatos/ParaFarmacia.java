@@ -106,6 +106,21 @@ public class ParaFarmacia extends Producto{
         this.descuento = descuento;
     }
     
+     /**
+     * Método que devuelve una cadena con los atributos del objeto
+     * @return registro cadena con atributos
+     */
+    @Override
+    public String guardarDatos(){
+        
+       String registro;
+       
+       registro = super.guardarDatos() + "&" + categoria + "&" + dosisUnidades + "&" + descuento +  "\n";
+       
+       return registro;
+       
+   }// fin del método  guardarDatos().
+    
     @Override
     public String toString(){
     

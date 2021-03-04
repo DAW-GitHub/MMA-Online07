@@ -111,6 +111,20 @@ public final class Medicamento extends Producto {
         this.efectosAdversos = efectosAdversos;
     }
     
+     /**
+     * Método que devuelve una cadena con los atributos del objeto
+     * @return registro cadena con atributos
+     */
+    @Override
+    public String guardarDatos(){
+        
+       String registro;
+       
+       registro = super.guardarDatos() + "&" + medicamento + "&" + comoTomar + "&" + efectosAdversos + "\n";
+       
+       return registro;
+   }// fin del método  guardarDatos().
+    
     /**
      * Método toString del Medicamento
      * @return datos del medicamento

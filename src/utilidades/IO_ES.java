@@ -2,9 +2,12 @@
 package utilidades;
 
 import estructuraDatos.Enumerados;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -1148,24 +1151,65 @@ public class IO_ES {
    }
 
    
+   //----------------------------------------------
+    /**           MÉTDODOS DE ARCHIVOS           */
+   //---------------------------------------------- 
+   
+   /**
+    * Método para leer el contenido de un archivo
+    * @param ruta ubicación del archivo
+    * @return result cadena con el contenido del archivo
+    */
    public static String leerArchivo(String ruta){
-       String result= "";
+       
+       String result = "";
+       
        try{
-          FileReader fichero =new FileReader(ruta); //ENTRADA
-         
-          int l=fichero.read();
-          
-          while(l != -1){
-              l=fichero.read();
-              
-              result += (char)l;
-          }
-          
-          fichero.close();
-        }catch(IOException e){
-            System.out.println("Archivo no encontrado" + e.getMessage());
+           
+            result = new String(Files.readAllBytes(Paths.get(ruta)));
+            
+        }catch (FileNotFoundException e){
+            
+            System.out.println(Color.ROJO + "El archivo no existe." + Color.RESET);
+            
+        }catch (IOException ex) {
+            
         }
+       
        return result;
        
    }
+
+
+    /**
+     * Método para escribir en un archivo
+    * @param ruta ubicación del archivo
+    * @param datos datos que se desea añadir en el archivo
+    * @param sobreescribir si se sobreescribe o no.
+    * @return true | false
+    */ 
+    public static boolean escribirArchivo(String ruta, String datos, boolean sobreescribir) {
+
+        boolean verif = false;
+                
+        try{
+
+            FileWriter fichero = new FileWriter(ruta,sobreescribir);
+
+            fichero.write(datos);
+
+            verif = true;
+
+            fichero.close();
+            
+
+        }catch(IOException e){
+
+            System.out.println(Color.ROJO + "Error: fichero no encontrado."+ Color.RESET);
+        }
+
+        return verif;
+    }
+    
+    
 }

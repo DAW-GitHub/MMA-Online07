@@ -14,6 +14,8 @@ public class CPrincipal {
     
     private final static int NUMERO_CLIENTES = 50; //50
     private final static int NUMERO_PRODUCTOS = 40; //40
+    private final static String RUTA_CLIENTES = "Registros-Clientes.txt";
+    private final static String RUTA_PRODUCTOS = "Registros-Productos.txt";
     
     private static int contadorClientes = 0;
 
@@ -45,8 +47,9 @@ public class CPrincipal {
             IO_ES.escribirLN(Color.AZUL + "0. Salir" + Color.RESET);
             IO_ES.escribirLN(Color.AZUL + "1. GESTIONAR CLIENTES" + Color.RESET);
             IO_ES.escribirLN(Color.AZUL + "2. GESTIONAR PRODUCTOS" + Color.RESET);
+            IO_ES.escribirLN(Color.AZUL + "3. GUARDAR DATOS" + Color.RESET);
 
-            option=IO_ES.leerByte(Color.AZUL + "Elija una opción: "+ Color.RESET, 0, 2);
+            option=IO_ES.leerByte(Color.AZUL + "Elija una opción: "+ Color.RESET, 0, 3);
 
 
 
@@ -54,7 +57,9 @@ public class CPrincipal {
                 switch(option){
                     case 0:
                       /**OPCIÓN 0: SALIR*/
-
+                        
+                        menuGuardarDatos();
+                        
                         break;
 
                     case 1:
@@ -68,6 +73,15 @@ public class CPrincipal {
                       /**OPCIÓN 2: GESTIONAR PRODUCTOS*/
 
                         menuProducto();
+
+                        break;
+                     
+                    case 3:
+                      /**OPCIÓN 2: GESTIONAR PRODUCTOS*/
+
+                        if(guardarDatosCP()){
+                            
+                        }
 
                         break;
                         
@@ -339,6 +353,42 @@ public class CPrincipal {
 
         }while(option != 0);
     }
+    
+     
+    /**
+     * Método que pide al usuario elegir entre guardar o no antes de salir del programa
+     * @return 0 para salir de la aplicación.
+     */
+    public static byte menuGuardarDatos(){
+       
+       byte option;
+ 
+            IO_ES.escribirLN(Color.AZUL + "\n -------------------------------" + Color.RESET);
+            IO_ES.escribirLN(Color.AZUL + "1. GUARDAR Y SALIR" + Color.RESET);
+            IO_ES.escribirLN(Color.AZUL + "2. SALIR SIN GUARDAR" + Color.RESET);
+
+            option=IO_ES.leerByte(Color.AZUL + "Elija una opción: "+ Color.RESET, 1, 2);
+
+
+                switch(option){
+                    
+                    case 1:
+                      /**OPCIÓN 1: GUARDAR Y SALIR*/
+
+                        guardarDatosCP();
+
+                        break;
+
+                    case 2:
+                      /**OPCIÓN 2: SALIR SIN GUARDAR*/
+
+                        break;
+                        
+                }
+                
+        return 0;
+
+   }//fin del método menuGuardarDatos().
 
     /** MÉTODOS DE GESTION DE CLIENTES */ 
     
@@ -694,6 +744,9 @@ public class CPrincipal {
         
     }//fin del método
     
+    /**
+     * Método que permite visualizar lso clientes uno por uno
+     */
     public static void visualizarProductosIndividualmente(){
         /** Variable auxiliar */
         int i = 0;
@@ -786,7 +839,7 @@ public class CPrincipal {
                     
                     } catch(IllegalArgumentException e){
                 
-                        System.out.println(Color.ROJO + "El tipo de medicamento elegido no existe." + Color.RESET);
+                        IO_ES.escribirLN(Color.ROJO + "El tipo de medicamento elegido no existe." + Color.RESET);
 
                     }
                     break;
@@ -1081,7 +1134,6 @@ public class CPrincipal {
         
     }//fin del método buscarPosicionProducto().
     
-
     /**
      * Método para comprobar si un cliente ya existe
      * @param dni dni del cliente a buscar
@@ -1212,6 +1264,138 @@ public class CPrincipal {
     } 
     
     /**
+     * Método que permite alamcenar los datos de los clientes y los productos en un archivo
+     * @return verif true | false
+     */
+    public static boolean guardarDatosCP(){
+        
+        boolean verif, flagCliente, flagProducto; 
+        
+        verif = false; 
+        
+        flagCliente = false;
+        
+        flagProducto = false; 
+        
+        if(contadorClientes > 0){
+            
+            for(int i=-1; i<contadorClientes; i++){
+                
+                if(i==-1)  IO_ES.escribirArchivo(RUTA_CLIENTES, "id&nombre&direccion&telefono&baja\n", false);
+            
+                else    IO_ES.escribirArchivo(RUTA_CLIENTES, clientes[i].guardarDatos(), true);
+               
+            }//fin del bucle for
+            
+            flagCliente = true;
+            
+            IO_ES.escribirLN(Color.VERDE + "--> CLIENTES GUARDADOS" + Color.RESET);
+            
+            
+        }else{
+            
+            IO_ES.escribirLN(Color.ROJO + "No existen clientes" + Color.RESET);
+            
+        }
+        
+        if(productos.length > 0){
+            
+            IO_ES.escribirArchivo( RUTA_PRODUCTOS, "codigo&nombre&descripcion&precio&unidades&tipo\n", false);
+            
+            for(int i=0; i < productos.length; i++){
+            
+                if(productos[i] != null){
+
+                    IO_ES.escribirArchivo(RUTA_PRODUCTOS, productos[i].guardarDatos(), true);
+            
+                }//fin del condicional if
+
+            }//fin del bucle for
+
+            flagProducto = true;
+            
+            IO_ES.escribirLN(Color.VERDE + "--> PRODUCTOS GUARDADOS" + Color.RESET);
+            
+        }else{
+            
+            IO_ES.escribirLN(Color.ROJO + "No existen productos almacenados." + Color.RESET);
+            
+        }
+        
+        if (flagCliente && flagProducto){
+            
+            verif = true;
+            
+        }
+        
+        return verif;
+    }//cierre del método guardarDatos(Cliente[] clientes, Producto[] productos, String rutaCliente,String rutaProducto).
+    
+    /**
+     * Leer datos de un archivo e incorporarlos a un array
+     */
+    public static void leerDatos(){
+        
+        String registrosClientes, registrosProductos;
+        
+        String[]copiaClientes, copiaProductos;
+        
+        //Lectura de ficheros
+        registrosClientes=IO_ES.leerArchivo(RUTA_CLIENTES);
+        registrosProductos=IO_ES.leerArchivo(RUTA_PRODUCTOS);
+        
+        //Dividimos por registros
+        copiaClientes = registrosClientes.split("\n");
+        copiaProductos = registrosProductos.split("\n");
+        
+        //Almacenar en array cliente y productos
+        
+        if(copiaClientes.length != 1){
+            for(int i=0 ; i<copiaClientes.length-1; i++){
+
+                String[] atributos;
+
+                atributos = copiaClientes[i+1].split("&");
+
+                clientes[i] = new Cliente(atributos[0],atributos[1],atributos[2],atributos[3],Boolean.parseBoolean(atributos[4]));
+
+                contadorClientes++;
+            }
+        }
+        
+        if(copiaProductos.length != 1){
+            for(int i=1; i<copiaProductos.length; i++){
+
+                String[] atributos;
+
+                atributos = copiaProductos[i].split("&");
+
+                try{
+
+                    TipoMedicamento tipo = TipoMedicamento.valueOf(atributos[5].toUpperCase());
+
+                    productos[i] = new Medicamento(atributos[0],atributos[1],atributos[2],Float.parseFloat(atributos[3]),Integer.parseInt(atributos[4]),tipo,atributos[6],atributos[7]);
+
+                }catch (Exception e){
+
+                    try{
+                        
+                        Categoria categoria = Categoria.valueOf(atributos[5].toUpperCase());
+
+                        productos[i] = new ParaFarmacia(atributos[0], atributos[1], atributos[2], Float.parseFloat(atributos[3]), Integer.parseInt(atributos[4]), categoria, Integer.parseInt(atributos[6]), Float.parseFloat(atributos[7]));
+
+                    }catch (Exception ex){
+
+                    }
+                }
+            }
+        }//fin del condicional if
+                  
+    }//cierre del método leerDatos().
+    
+    
+    
+    /**
      * Método main de la clase CPrincipal
      * @param args the command line arguments
      */
@@ -1220,8 +1404,8 @@ public class CPrincipal {
         clientes = new Cliente[NUMERO_CLIENTES];
         productos = new Producto[NUMERO_PRODUCTOS];
         
-        String archivo = IO_ES.leerArchivo("archivo.txt");
-        System.out.println(archivo);
+        leerDatos();
+        
         menu();    
              
         IO_ES.escribirLN("");

@@ -254,7 +254,18 @@ public abstract class Producto {
         
     }//fin del método quitarUnidades(int valor)
     
-    //MENÚ
+    /**
+     * Método que devuelve una cadena con los atributos del objeto
+     * @return registro cadena con atributos
+     */
+    public String guardarDatos(){
+        
+       String registro;
+       
+       registro = codigo + "&" + nombre + "&" + descripcion + "&" + precio + "&" + unidades;
+       
+       return registro;
+   }// fin del método  guardarDatos().
     
     /**
      * Método para la creación de una representación mediante un String de un objeto utilizando su contenido.

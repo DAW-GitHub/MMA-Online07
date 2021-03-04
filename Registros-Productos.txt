@@ -1,0 +1,2 @@
+codigo&nombre&descripcion&precio&unidades&tipo
+1234567891234&med&ninguno&20.0&60&ANTIALERGICOS&oral&ninguno
