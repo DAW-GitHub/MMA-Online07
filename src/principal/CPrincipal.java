@@ -1219,7 +1219,9 @@ public class CPrincipal {
         // TODO code application logic here
         clientes = new Cliente[NUMERO_CLIENTES];
         productos = new Producto[NUMERO_PRODUCTOS];
-
+        
+        String archivo = IO_ES.leerArchivo("archivo.txt");
+        System.out.println(archivo);
         menu();    
              
         IO_ES.escribirLN("");

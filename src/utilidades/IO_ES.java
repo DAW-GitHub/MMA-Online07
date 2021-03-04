@@ -2,6 +2,9 @@
 package utilidades;
 
 import estructuraDatos.Enumerados;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -1144,4 +1147,25 @@ public class IO_ES {
         String option = s.nextLine();
    }
 
+   
+   public static String leerArchivo(String ruta){
+       String result= "";
+       try{
+          FileReader fichero =new FileReader(ruta); //ENTRADA
+         
+          int l=fichero.read();
+          
+          while(l != -1){
+              l=fichero.read();
+              
+              result += (char)l;
+          }
+          
+          fichero.close();
+        }catch(IOException e){
+            System.out.println("Archivo no encontrado" + e.getMessage());
+        }
+       return result;
+       
+   }
 }
